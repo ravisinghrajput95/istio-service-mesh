@@ -1,0 +1,25 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: backend-allow-frontend
+  namespace: cloudcart
+spec:
+  selector:
+    matchLabels:
+      app: cloudcart-backend
+
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:
+        - cluster.local/ns/cloudcart/sa/default
+    to:
+    - operation:
+        methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+        - OPTIONS

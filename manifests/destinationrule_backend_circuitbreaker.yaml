@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: cloudcart-backend
+  namespace: cloudcart
+spec:
+  host: cloudcart-backend
+
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 10
+        idleTimeout: 30s
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+    loadBalancer:
+      simple: LEAST_REQUEST

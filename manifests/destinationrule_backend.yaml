@@ -1,0 +1,11 @@
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: backend
+  namespace: cloudcart
+spec:
+  host: cloudcart-backend
+
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_REQUEST
