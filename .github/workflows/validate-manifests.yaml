@@ -1,0 +1,31 @@
+name: Validate Istio manifests
+
+on:
+  push:
+    paths:
+      - "manifests/**"
+      - ".github/workflows/validate-manifests.yaml"
+  pull_request:
+    paths:
+      - "manifests/**"
+      - ".github/workflows/validate-manifests.yaml"
+
+env:
+  ISTIOCTL_VERSION: "1.30.2"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install istioctl
+        run: |
+          curl -sSL https://istio.io/downloadIstio | ISTIO_VERSION="${ISTIOCTL_VERSION}" TARGET_ARCH=x86_64 sh -
+          echo "$PWD/istio-${ISTIOCTL_VERSION}/bin" >> "$GITHUB_PATH"
+
+      - name: Validate manifest schemas
+        run: istioctl validate -f manifests/
+
+      - name: Analyze for common config mistakes
+        run: istioctl analyze --use-kube=false manifests/*.yaml

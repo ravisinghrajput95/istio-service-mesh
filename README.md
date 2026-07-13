@@ -55,6 +55,13 @@ through the ingress gateway. Screenshots:
 | [`validation/04-authorizationpolicy.png`](validation/04-authorizationpolicy.png) | RBAC policies applied to the backend pod, principal restricted to `sa/default` |
 | [`validation/05-peerauthentication.png`](validation/05-peerauthentication.png) | Effective mTLS mode STRICT, valid Envoy cert chain + root CA issued |
 
+## CI
+
+[`.github/workflows/validate-manifests.yaml`](.github/workflows/validate-manifests.yaml)
+runs `istioctl validate` and `istioctl analyze --use-kube=false` against
+everything in `manifests/` on every push/PR that touches it — schema and
+config-mistake checks only, no live cluster required.
+
 ## Notes
 
 - Namespace: `cloudcart`. Cluster: GKE (`cloudcart-dev`).
